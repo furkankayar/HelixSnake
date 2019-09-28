@@ -7,6 +7,7 @@ public class Snake{
   private long lastMovingTime;
   private int size;
   private boolean status;
+  private int speed;
 
   public Snake(){
 
@@ -15,6 +16,7 @@ public class Snake{
     for(int i = 0, x = 13, y = 31; i < 3 ; i++, x++){
       addInitialPart(Config.NUCLEOTIDES[(int)(Math.random() * 4)], x, y);
     }
+    speed = Config.SNAKESPEEDBEGINNER;
   }
 
   public void addInitialPart(char nucleotide, int coordX, int coordY){
@@ -119,8 +121,6 @@ public class Snake{
       }
     }
 
-    this.lastMovingTime = System.currentTimeMillis();
-
     return new int[]{tempX, tempY};
   }
 
@@ -187,11 +187,23 @@ public class Snake{
     return this.lastMovingTime;
   }
 
+  public void setLastMovingTime(long lastMovingTime){
+    this.lastMovingTime = lastMovingTime;
+  }
+
   public boolean getStatus(){
     return this.status;
   }
 
   public void setStatus(boolean status){
     this.status = status;
+  }
+
+  public void setSpeed(int speed){
+    this.speed = speed;
+  }
+
+  public int getSpeed(){
+    return this.speed;
   }
 }

@@ -18,7 +18,13 @@ public class Proteins{
       br = new BufferedReader(new FileReader(new File(Config.PROTEINFILE)));
     }
     catch(FileNotFoundException ex){
+      System.out.print("aminoacids.txt has not been found. Terminating...");
+      for(int i = 5 ; i > 0 ; i--){
+        System.out.print(" " +i);
+        try{Thread.sleep(1000);}catch(Exception e){}
+      }
 
+      System.exit(0);
     }
 
     createProteins();

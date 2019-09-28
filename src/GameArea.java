@@ -12,7 +12,7 @@ public class GameArea{
   }
 
   public void initializeFoods(){
-    
+
     for(int i = 0 ; i < Config.INITIALFOODNUMBER ; i++) putRandomFood();
   }
 
@@ -67,11 +67,11 @@ public class GameArea{
 
   public void putRandomFood(){
 
-    int y = (int)(Math.random() * Config.GAMEAREAWIDTH - 2) + 1;
-    int x = (int)(Math.random() * Config.GAMEAREAHEIGHT - 2) + 1;
+    int y = (int)(Math.random() * Config.GAMEAREAWIDTH);
+    int x = (int)(Math.random() * Config.GAMEAREAHEIGHT);
     while(ground[x][y] != ' '){
-      y = (int)(Math.random() * Config.GAMEAREAWIDTH - 2) + 1;
-      x = (int)(Math.random() * Config.GAMEAREAHEIGHT - 2) + 1;
+      y = (int)(Math.random() * Config.GAMEAREAWIDTH);
+      x = (int)(Math.random() * Config.GAMEAREAHEIGHT);
     }
     ground[x][y] = Config.NUCLEOTIDES[(int)(Math.random() * 4)];
 

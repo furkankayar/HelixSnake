@@ -50,7 +50,6 @@ public class Controller{
 
   public void startGame(){
 
-  //  String lastActiveScreen = ui.getActiveScreen();
 
     String lastActiveScreen = "Login";
     while(true){
@@ -88,6 +87,11 @@ public class Controller{
         ui.printMapDesign();
         lastActiveScreen = "MapDesign";
       }
+      else if(ui.getActiveScreen().equals("LevelSelect") && !lastActiveScreen.equals("LevelSelect")){
+        ui.clear();
+        ui.printLevelSelect();
+        lastActiveScreen = "LevelSelect";
+      }
 
       try{Thread.sleep(50);}catch(Exception e){}
 
@@ -96,8 +100,11 @@ public class Controller{
 
   public void runGame(){
 
+
     if(turn > 0)
       restartGame();
+    ui.printStatics();
+    snake.setSpeed(ui.getSelectedSnakeSpeed());
     ui.drawGameArea(gameArea.getGround(), snake);
     gameArea.placeSnake(snake);
     snake.searchProteins(proteins, player);
@@ -119,11 +126,13 @@ public class Controller{
         }
 
 
-        if(System.currentTimeMillis() >= snake.getLastMovingTime() + Config.SNAKEMOVINGDELAY){
+        if(System.currentTimeMillis() >= snake.getLastMovingTime() + snake.getSpeed()){
           int[] lastCoordinates = snake.move();
           collisionDetection(lastCoordinates);
           gameArea.clearPoint(lastCoordinates);
           ui.printLevelTime(level, time, player.getScore() );
+          gameArea.placeSnake(snake);
+          snake.setLastMovingTime(System.currentTimeMillis());
 
         }
 
@@ -133,7 +142,6 @@ public class Controller{
         }
 
         if(!isGameEnd){
-          gameArea.placeSnake(snake);
           ui.drawGameArea(gameArea.getGround(), snake);
         }
       }

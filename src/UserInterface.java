@@ -23,8 +23,10 @@ public class UserInterface implements KeyListener, TextMouseListener{
   private String activeScreen;
   private int cursorPosition;
   private int cursorPosition2;
+  private int cursorPosition3;
   private char[][] designArea;
   private boolean designStatus;
+  private int selectedSnakeSpeed;
 
 
   private String[] header = {"██╗  ██╗███████╗██╗     ██╗██╗  ██╗    ███████╗███╗   ██╗ █████╗ ██╗  ██╗███████╗\n",
@@ -63,7 +65,7 @@ public class UserInterface implements KeyListener, TextMouseListener{
   public UserInterface(Snake snake, GameArea ga){
     this.snake = snake;
     this.ga = ga;
-    console = Enigma.getConsole("Helix Snake", 100,30, 25, 0);
+    console = Enigma.getConsole("Helix Snake", 110,30, 25, 0);
     activeScreen = "Login";
     cursorPosition = 0;
     designArea = new char[Config.GAMEAREAHEIGHT][Config.GAMEAREAWIDTH];
@@ -98,26 +100,26 @@ public class UserInterface implements KeyListener, TextMouseListener{
 
         for(int i = 0 ; i < header.length ; i++){
           console.setTextAttributes(new TextAttributes(new Color((int)(Math.random() * 0xFF),(int)(Math.random() * 0xFF),(int)(Math.random() * 0xFF))));
-          console.getTextWindow().setCursorPosition(10, 5+i);
+          console.getTextWindow().setCursorPosition(15, 5+i);
           console.getWriter().print(header[i]);
         }
         lastChangeTime = System.currentTimeMillis();
       }
-      console.getTextWindow().setCursorPosition(48, 17);
+      console.getTextWindow().setCursorPosition(53, 17);
       if(cursorPosition == 0){
         console.setTextAttributes(new TextAttributes(new Color(0x7C,0x10,0xE9), new Color(0xBF,0xFF,0xF3)));
       }
       console.getWriter().print("• Play •");
       console.setTextAttributes(new TextAttributes(new Color(0xFF,0xFF,0xFF)));
-      console.getTextWindow().setCursorPosition(45, 19);
+      console.getTextWindow().setCursorPosition(50, 19);
       if(cursorPosition == 1){
         console.setTextAttributes(new TextAttributes(new Color(0xBF,0xFF,0xF3), new Color(0x7C,0x10,0xE9)));
       }
       console.getWriter().print("• Highscores •");
       console.setTextAttributes(new TextAttributes(new Color(0xFF,0xFF,0xFF)));
-      console.getTextWindow().setCursorPosition(44, 21);
+      console.getTextWindow().setCursorPosition(49, 21);
       if(cursorPosition == 2){
-        console.setTextAttributes(new TextAttributes(new Color(0xBF,0xFF,0xF3),new Color(0xCC,0xA1,0x16)));
+        console.setTextAttributes(new TextAttributes(new Color(0x00,0x00,0x00),new Color(0xCC,0xA1,0x16)));
       }
       console.getWriter().print("• Map Designer •");
 
@@ -167,17 +169,40 @@ public class UserInterface implements KeyListener, TextMouseListener{
 
   public void printLevelTime(int level, int time, int score){
 
-    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 8, Config.GAMEAREAHEIGHT - 2);
-    console.getWriter().print("            ");
-    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 8, Config.GAMEAREAHEIGHT - 1);
-    console.getWriter().print("            ");
-    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 8, Config.GAMEAREAHEIGHT - 2);
-    console.getWriter().print("Level: " + level);
-    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 8, Config.GAMEAREAHEIGHT - 1);
-    console.getWriter().print("Time: " + time);
-    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 8, 5);
-    console.getWriter().print("Score " + score);
+    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 33, Config.GAMEAREAHEIGHT - 3);
+    console.getWriter().print(level);
+    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 21, Config.GAMEAREAHEIGHT - 3);
+    console.getWriter().print(time);
+    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 25, 4);
+    console.getWriter().print(score);
 
+  }
+
+  public void printStatics(){
+    console.setTextAttributes(new TextAttributes(new Color(0xDC,0x04,0xE0)));
+    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 3, 1);
+    console.getWriter().print(" __| |______________________________| |__ \n");
+    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 3, 2);
+    console.getWriter().print("(__   ______________________________   __)\n");
+    for(int i = 0 ; i < 22 ; i++){
+      console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 3, 3+i);
+      console.getWriter().print("   | |                              | |   \n");
+    }
+    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 3, 25);
+    console.getWriter().print(" __| |______________________________| |__ \n");
+    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 3, 26);
+    console.getWriter().print("(__   ______________________________   __)\n");
+    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 3, 27);
+    console.getWriter().print("   | |                              | |   \n");
+
+    console.setTextAttributes(new TextAttributes(new Color(0x42,0xBC,0xF4)));
+    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 19, 4);
+    console.getWriter().print("Score ");
+    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 15, Config.GAMEAREAHEIGHT - 3);
+    console.getWriter().print("Time: ");
+    console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 26, Config.GAMEAREAHEIGHT - 3);
+    console.getWriter().print("Level: ");
+    console.setTextAttributes(new TextAttributes(new Color(0xFF,0xFF,0xFF)));
   }
 
   public void printProteins(String[] proteins){
@@ -185,11 +210,11 @@ public class UserInterface implements KeyListener, TextMouseListener{
     for(int i = 0 ; i < proteins.length && proteins[i] != null; i++){
 
       if(i >= 15 && i < 30)
-        console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 18, Config.GAMEAREAHEIGHT - 20 + i % 15);
+        console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 20, Config.GAMEAREAHEIGHT - 20 + i % 15);
       else if(i >= 30 && i < 45)
-        console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 28, Config.GAMEAREAHEIGHT - 20 + i % 15);
+        console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 30, Config.GAMEAREAHEIGHT - 20 + i % 15);
       else
-        console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 8, Config.GAMEAREAHEIGHT - 20 + i);
+        console.getTextWindow().setCursorPosition(Config.GAMEAREAWIDTH + 10, Config.GAMEAREAHEIGHT - 20 + i);
 
       console.getWriter().print(proteins[i]);
     }
@@ -215,7 +240,7 @@ public class UserInterface implements KeyListener, TextMouseListener{
     for(int i = 0 ; i < leaderBoard.length ; i++){
       for(int j = 0 ; j < leaderBoard[0].length; j++){
         console.setTextAttributes(new TextAttributes(new Color((int)(Math.random() * 0xFF),(int)(Math.random() * 0xFF),(int)(Math.random() * 0xFF))));
-        console.getTextWindow().setCursorPosition(j + 6, i + 2);
+        console.getTextWindow().setCursorPosition(j + 11, i + 2);
         console.getWriter().print(leaderBoard[i][j]);
       }
       console.getWriter().println();
@@ -232,22 +257,28 @@ public class UserInterface implements KeyListener, TextMouseListener{
     printLeaderboardText();
 
     console.setTextAttributes(new TextAttributes(new Color(0x61,0x25,0xED)));
-    console.getTextWindow().setCursorPosition(32,10);
+    console.getTextWindow().setCursorPosition(37,10);
     console.getWriter().println(String.format("%-8s%10s%16s\n","Rank", "Name", "Score"));
 
 
 
     for(int i = 0 ; i < 10 ; i++){
-      Player player = temp.getPlayer();
-      if(i == 0)
-        records[i] = String.format("%s\u265b\u265b\u265b %-12d%-17s%-5d \u265b\u265b\u265b","    ", i + 1, player.getName(), player.getScore()).toCharArray();
-      else if(i == 1)
-        records[i] = String.format("%s \u265b\u265b %-12d%-17s%-5d \u265b\u265b ","    ", i + 1, player.getName(), player.getScore()).toCharArray();
-      else if(i == 2)
-        records[i] = String.format("%s  \u265b %-12d%-17s%-5d \u265b  ","    ", i + 1, player.getName(), player.getScore()).toCharArray();
-      else
-        records[i] = String.format("%s    %-12d%-17s%-5d    ","    ", i + 1, player.getName(), player.getScore()).toCharArray();
-      temp = temp.getNext();
+
+      if(temp != null){
+        Player player = temp.getPlayer();
+        if(i == 0)
+          records[i] = String.format("%s\u265b\u265b\u265b %-12d%-17s%-5d \u265b\u265b\u265b","    ", i + 1, player.getName(), player.getScore()).toCharArray();
+        else if(i == 1)
+          records[i] = String.format("%s \u265b\u265b %-12d%-17s%-5d \u265b\u265b ","    ", i + 1, player.getName(), player.getScore()).toCharArray();
+        else if(i == 2)
+          records[i] = String.format("%s  \u265b %-12d%-17s%-5d \u265b  ","    ", i + 1, player.getName(), player.getScore()).toCharArray();
+        else
+          records[i] = String.format("%s    %-12d%-17s%-5d    ","    ", i + 1, player.getName(), player.getScore()).toCharArray();
+        temp = temp.getNext();
+      }
+      else{
+        records[i] = String.format("%s    %-12s%-17s%-5s    ","    ", "", "", "").toCharArray();
+      }
     }
 
     char[][] check = new char[10][46];
@@ -265,7 +296,7 @@ public class UserInterface implements KeyListener, TextMouseListener{
         console.setTextAttributes(new TextAttributes(new Color(0x52,0xE5,0x22)));
       else if(y == 2)
         console.setTextAttributes(new TextAttributes(new Color(0xE0,0x0D,0x0D)));
-      console.getTextWindow().setCursorPosition(x + 25,y + 12);
+      console.getTextWindow().setCursorPosition(x + 30,y + 12);
       console.getWriter().print(records[y][x]);
       if(i < 400)
         try{Thread.sleep(1);}catch(Exception ex){}
@@ -398,15 +429,40 @@ public class UserInterface implements KeyListener, TextMouseListener{
 
   }
 
+  public void printLevelSelect(){
+
+    while("LevelSelect".equals(activeScreen)){
+      console.getTextWindow().setCursorPosition(50, 10);
+      if(cursorPosition3 == 0){
+        console.setTextAttributes(new TextAttributes(new Color(0x00,0x00,0x00), new Color(0x5F,0xF4,0x42)));
+      }
+      console.getWriter().print("☠ Beginner ☠");
+      console.setTextAttributes(new TextAttributes(new Color(0xFF,0xFF,0xFF)));
+      console.getTextWindow().setCursorPosition(47, 15);
+      if(cursorPosition3 == 1){
+        console.setTextAttributes(new TextAttributes(new Color(0x00,0x00,0x00), new Color(0xCC,0xA1,0x16)));
+      }
+      console.getWriter().print("☠☠ Professional ☠☠");
+      console.setTextAttributes(new TextAttributes(new Color(0xFF,0xFF,0xFF)));
+      console.getTextWindow().setCursorPosition(48, 20);
+      if(cursorPosition3 == 2){
+        console.setTextAttributes(new TextAttributes(new Color(0xFF,0xFF,0xFF),new Color(0xEF,0x2D,0x2D)));
+      }
+      console.getWriter().print("☠☠☠ Superstar ☠☠☠");
+
+      console.setTextAttributes(new TextAttributes(new Color(0xFF,0xFF,0xFF)));
+    }
+  }
+
   public void printDesignArea(){
 
-    console.getTextWindow().setCursorPosition(25, 0);
+    console.getTextWindow().setCursorPosition(30, 0);
     console.getWriter().print("Create Your Map! Press 's' to save and 'Esc' to exit.");
 
     for(int i = 0 ; i < designArea.length ; i++){
       for(int j = 0 ; j < designArea[0].length ; j++){
 
-        console.getTextWindow().setCursorPosition(j + 20, i + 2);
+        console.getTextWindow().setCursorPosition(j + 25, i + 2);
         if(designArea[i][j] == ' '){
           console.setTextAttributes(new TextAttributes(new Color(0x00,0x00,0x10), new Color(0xFF,0xFF,0xFF)));
           console.getWriter().print(" ");
@@ -453,7 +509,7 @@ public class UserInterface implements KeyListener, TextMouseListener{
       switch(key){
         case KeyEvent.VK_UP: if(cursorPosition == 0) cursorPosition = 2; else cursorPosition--;new SoundFX.UIEffect().start();break;
         case KeyEvent.VK_DOWN: if(cursorPosition == 2) cursorPosition = 0; else cursorPosition++;new SoundFX.UIEffect().start();break;
-        case KeyEvent.VK_ENTER: if(cursorPosition == 0) activeScreen = "Game";
+        case KeyEvent.VK_ENTER: if(cursorPosition == 0) activeScreen = "LevelSelect";
                                 else if(cursorPosition == 1) activeScreen = "Highscores";
                                 else if(cursorPosition == 2) activeScreen = "MapDesign";break;
         case KeyEvent.VK_ESCAPE: System.exit(0);break;
@@ -488,6 +544,19 @@ public class UserInterface implements KeyListener, TextMouseListener{
         case KeyEvent.VK_S: saveDesign();break;
       }
     }
+    else if("LevelSelect".equals(activeScreen)){
+
+      switch(key){
+        case KeyEvent.VK_ESCAPE: activeScreen = "Login";break;
+        case KeyEvent.VK_UP: if(cursorPosition3 == 0) cursorPosition3 = 2; else cursorPosition3--;new SoundFX.UIEffect().start();break;
+        case KeyEvent.VK_DOWN: if(cursorPosition3 == 2) cursorPosition3 = 0; else cursorPosition3++;new SoundFX.UIEffect().start();break;
+        case KeyEvent.VK_ENTER: switch(cursorPosition3){
+                                  case 0: this.selectedSnakeSpeed = Config.SNAKESPEEDBEGINNER;activeScreen = "Game";break;
+                                  case 1: this.selectedSnakeSpeed = Config.SNAKESPEEDPROFESSIONAL;activeScreen = "Game";break;
+                                  case 2: this.selectedSnakeSpeed = Config.SNAKESPEEDSUPERSTAR;activeScreen = "Game";break;
+                                }break;
+      }
+    }
   }
 
   public void setSnake(Snake snake){
@@ -504,6 +573,10 @@ public class UserInterface implements KeyListener, TextMouseListener{
 
   public void setDesignStatus(boolean designStatus){
     this.designStatus = designStatus;
+  }
+
+  public int getSelectedSnakeSpeed() {
+  	return this.selectedSnakeSpeed;
   }
 
   @Override
@@ -530,8 +603,8 @@ public class UserInterface implements KeyListener, TextMouseListener{
     if("MapDesign".equals(activeScreen)){
       int x = 0;
       int y = 0;
-      if((x = event.getX()) < designArea[0].length + 20 && x >= 20 && (y = event.getY()) < designArea.length + 2 && y >= 2){
-        designArea[y- 2][x - 20] = Config.WALL;
+      if((x = event.getX()) < designArea[0].length + 25 && x >= 25 && (y = event.getY()) < designArea.length + 2 && y >= 2){
+        designArea[y- 2][x - 25] = Config.WALL;
         printDesignArea();
       }
     }
