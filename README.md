@@ -12,8 +12,7 @@ end of a sequence.</p>
 
 <b>Detail Information</b>
 <ul>
-<li>The snake starts with 3 letters assigned randomly out of four letter (A, C, G, T) as highlighted in the
-  figure.</li>
+<li>The snake starts with 3 letters assigned randomly out of four letter (A, C, G, T).</li>
 
 <li>There are 3 letters randomly generated in the game area at the start. When the snake eats a
 letter, a new letter is generated in the game area to maintain starting number of letters.</li>
